@@ -1,0 +1,1 @@
+# GooleNewsCount_Strategy2
