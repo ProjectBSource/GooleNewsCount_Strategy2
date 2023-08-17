@@ -1,4 +1,5 @@
 # GooleNewsCount_Strategy2
+# result store in table patrick_strategy_1
 
 useful sql
 **1. find the symbol, close, checkd ate, first close, first check date, last close, last check date, close change in %**
