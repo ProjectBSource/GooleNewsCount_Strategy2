@@ -3,7 +3,6 @@
 
 useful sql
 **1. find the symbol, close, checkd ate, first close, first check date, last close, last check date, close change in %, day count**
-
 SELECT 
 	x.symbol,
 	x.close,
@@ -44,5 +43,9 @@ order by x.checkdate desc
 
 
 
+**2. find the median**
+SET @count := 0;
+SELECT a.id, a.resultcount FROM (
+   SELECT (@count:=@count+1) as id, resultcount FROM patrick_strategy_1 WHERE symbol='NLY' ORDER BY resultcount
+) a WHERE a.id = (@count/2)
 
-2.
