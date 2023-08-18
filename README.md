@@ -12,7 +12,9 @@ SELECT
 	x.lastClose,
 	x.lastCheckdate,
 	((x.firstClose - x.lastClose) / x.lastClose * 100) as closeChangeinPercentage,
-	x.total_count_days
+	x.total_count_days,
+	x.avg_news_count_of_each_day,
+	x.min_and_max_news_count_diff_of_each_day_in_precentage
 FROM(
 	SELECT 
 		z.symbol,
@@ -22,7 +24,9 @@ FROM(
 		z.firstCheckdate,
 		(SELECT close from patrick_strategy_1 f where f.symbol = z.symbol and f.checkdate = z.lastCheckdate) as lastClose,
 		z.lastCheckdate,
-		z.total_count_days
+		z.total_count_days,
+		z.avg_news_count_of_each_day,
+		z.min_and_max_news_count_diff_of_each_day_in_precentage
 	FROM(
 		SELECT 
 		c.symbol, 
@@ -30,13 +34,17 @@ FROM(
 		c.checkdate,
 		(SELECT min(d.checkdate) from patrick_strategy_1 d where d.symbol=c.symbol) as firstCheckdate,
 		(SELECT max(e.checkdate) from patrick_strategy_1 e where e.symbol=c.symbol) as lastCheckdate,
-		(SELECT count(e.checkdate) from patrick_strategy_1 e where e.symbol=c.symbol) as total_count_days
+		(SELECT count(e.checkdate) from patrick_strategy_1 e where e.symbol=c.symbol) as total_count_days,
+		(SELECT avg(e.resultcount) from patrick_strategy_1 e where e.symbol=c.symbol) as avg_news_count_of_each_day,
+		(SELECT (max(e.resultcount) - min(e.resultcount)) / max(e.resultcount) * 100 from patrick_strategy_1 e where e.symbol=c.symbol) as min_and_max_news_count_diff_of_each_day_in_precentage
 		from patrick_strategy_1 c
 		WHERE c.symbol in 
 		( SELECT a.symbol FROM ( SELECT symbol, sum(resultcount) as resultcounrsumup FROM patrick_strategy_1 group by symbol, resultcount order by resultcounrsumup desc limit 10 ) a )
 	) z
 ) x
 order by x.checkdate desc
+
+
 
 
 
