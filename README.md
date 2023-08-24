@@ -57,3 +57,25 @@ SELECT a.id, a.resultcount FROM (
    SELECT (@count:=@count+1) as id, resultcount FROM patrick_strategy_1 WHERE symbol='NLY' ORDER BY resultcount
 ) a WHERE a.id = (@count/2)
 
+
+
+
+
+**3. find each symbol first and latest date data**
+SELECT g.symbol, e.firstCheckDate, e.firstClose, f.lastCheckDate, f.lastClose FROM 
+(SELECT distinct symbol from patrick_strategy_1) g
+INNER JOIN
+(
+SELECT a.symbol, a.close as firstClose, b.firstCheckDate FROM patrick_strategy_1 a
+INNER JOIN ( SELECT min(checkdate) as firstCheckDate, symbol FROM patrick_strategy_1 group by symbol ) b
+ON a.Symbol = b.symbol and a.CheckDate = b.firstCheckDate
+) e ON g.symbol = e.symbol
+INNER JOIN
+(
+SELECT c.symbol, c.close as lastClose, d.lastCheckDate FROM patrick_strategy_1 c
+INNER JOIN ( SELECT max(checkdate) as lastCheckDate, symbol FROM patrick_strategy_1 group by symbol ) d
+ON c.Symbol = d.symbol and c.CheckDate = d.lastCheckDate
+) f ON g.symbol = f.symbol
+
+
+
