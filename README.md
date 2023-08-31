@@ -90,5 +90,6 @@ SELECT * FROM (
 ) h
 ORDER BY h.closeChange
 
-** 4. simple check order by checkdate **
+
+**4. simple check order by checkdate**
 select * from patrick_strategy_1 where symbol='SHOP' order by checkdate
