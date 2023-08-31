@@ -64,7 +64,7 @@ SELECT a.id, a.resultcount FROM (
 
 **3. find each symbol first and latest date data**
 SELECT * FROM (	
-	SELECT g.symbol, e.newsCount, e.newsDaysCount, e.firstCheckDate, e.firstClose, f.lastCheckDate, f.lastClose, ((f.lastClose - e.firstClose)/e.firstClose*100) AS closeChange FROM 
+	SELECT g.symbol, e.newsCount, e.newsDaysCount, h.maxClose, h.minClose, e.firstCheckDate, e.firstClose, f.lastCheckDate, f.lastClose, ((f.lastClose - e.firstClose)/e.firstClose*100) AS closeChange FROM 
 	(
 		SELECT distinct symbol from patrick_strategy_1
 	) g
@@ -84,6 +84,8 @@ SELECT * FROM (
 		) d
 		ON c.Symbol = d.symbol and c.CheckDate = d.lastCheckDate
 	) f ON g.symbol = f.symbol
+	INNER JOIN(
+		SELECT symbol, max(close) as maxClose, min(close) as minClose from patrick_strategy_1 group by symbol
+	) h ON g.symbol = h.symbol
 ) h
-ORDER BY h.closeChange;
-
+ORDER BY h.closeChange
