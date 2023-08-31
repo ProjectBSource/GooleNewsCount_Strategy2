@@ -93,3 +93,25 @@ ORDER BY h.closeChange
 
 **4. simple check order by checkdate**
 select * from patrick_strategy_1 where symbol='SHOP' order by checkdate
+
+
+
+**5. check the accl Resut Count of symbol**
+SELECT 
+c.symbol, 
+d.firstCheckDate, 
+c.checkdate, 
+(SELECT SUM(ResultCount) FROM patrick_strategy_1 WHERE symbol='SHOP' AND checkdate between d.firstCheckDate and c.checkdate) 
+FROM patrick_strategy_1 c
+INNER JOIN(
+	SELECT a.symbol, b.firstCheckDate, a.checkdate FROM patrick_strategy_1 a
+	INNER JOIN (
+		SELECT symbol, min(checkdate) as firstCheckDate, checkdate FROM patrick_strategy_1 WHERE symbol='SHOP' group by symbol 
+	) b
+	ON a.symbol = b.symbol
+	ORDER BY a.symbol, a.checkdate
+) d
+ON c.symbol = d.symbol
+WHERE c.checkdate between d.firstCheckDate and d.checkdate
+group by c.symbol, c.checkdate
+
