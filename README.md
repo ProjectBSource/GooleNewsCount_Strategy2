@@ -1,5 +1,6 @@
 # GooleNewsCount_Strategy2
 # the AWS lambda program: Investment_Stratgy_CountTheNews collect the data to DB table patrick_strategy_1
+# http://patrickfung.esy.es/Ertyuiop/GoogleNewsCount_Strategy2.php
 
 useful sql
 **1. find the symbol, close, checkd ate, first close, first check date, last close, last check date, close change in %, day count**
