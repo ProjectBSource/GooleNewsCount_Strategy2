@@ -119,7 +119,7 @@ group by c.symbol, c.checkdate
 
 
 **6. find the price change in a period**
-SELECT c.symbol, c.lastClose, c.firstClose, ((c.lastClose-c.firstClose)/c.firstClose*100)
+SELECT c.symbol, c.lastClose, c.firstClose, c.finalClose, ((c.lastClose-c.firstClose)/c.firstClose*100), ((c.finalClose-c.firstClose)/c.firstClose*100)
 FROM 
 (
     SELECT distinct a.symbol,
@@ -136,9 +136,15 @@ FROM
         DATE(b.checkdate) <= '2022-12-20'
         order by b.checkdate asc
         LIMIT 1
-    ) as firstClose
+    ) as firstClose,
+    (
+        select b.close from patrick_strategy_1 b where 
+        b.symbol = a.symbol
+        order by b.checkdate desc
+        LIMIT 1
+    ) as finalClose
     FROM patrick_strategy_1 a
     WHERE a.symbol in ('PLTR','SHOP','CCL','SLB','UBER','PDD','AMD','FCX','CMCSA','NU','HPE','GRAB','MU','MRVL','BP','VTRS','INTC','ITUB','ET','PBR-A','PINS','MO','CSX','VALE','ABEV','WBD','INFY','MRO','KMI','OXY','QCOM','NEM','SQ','BBD','BMY','SNAP','C','RF','NOK','VZ','GM','AMCR','SCHW','F','HBAN','DIS','USB','DVN','SIRI','PYPL','JD','RIVN','NIO','LCID')
-) c;
+) c
 
 
